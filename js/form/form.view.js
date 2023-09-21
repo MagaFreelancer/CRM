@@ -1,19 +1,27 @@
 export default class View {
-    constructor() {
-      this.data = {
-        users: [
-          // {
-          //   id: 0,
-          //   date: 234243422,
-          //   product: { value: "Курс по верстке", type: "html" },
-          //   name: "Петр Сергеевич",
-          //   email: "info@inbox.ru",
-          //   tlNumber: "+7 (909) 77-55-777",
-          //   status: "Новый",
-          // },
-        ],
-        newUsers: 0,
-      };
-    }
+  constructor() {}
+
+  elements = {
+    nameValue: document.querySelector("#name"),
+    numberValue: document.querySelector("#phone"),
+    emailValue: document.querySelector("#email"),
+    productValue: document.querySelector("#product"),
+    form: document.querySelector("#form"),
+    addDate: document.querySelector("#add-date"),
+  };
+  getActiveSelectValue() {
+    let select = this.elements.productValue;
+    return select.options[select.selectedIndex].innerText;
   }
-  
+  getInputs() {
+    return {
+      name: this.elements.nameValue.value,
+      number: this.elements.numberValue.value,
+      email: this.elements.emailValue.value,
+      product: {
+        value: this.getActiveSelectValue(),
+        type: this.elements.productValue.value,
+      },
+    };
+  }
+}

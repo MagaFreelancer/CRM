@@ -21,12 +21,15 @@ const testData = (function () {
     return Math.floor(Math.random() * max);
   }
   function setRandomDate() {
+    
     const nameField = document.querySelector("#name"),
       numberField = document.querySelector("#phone"),
       emailField = document.querySelector("#email");
     const randomIn = randomIndex(dates.length);
     const date = dates[randomIn];
-    console.log(randomIn);
+
+
+
     nameField.value = date.fullName;
     numberField.value = date.number;
     emailField.value = date.email;
