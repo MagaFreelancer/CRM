@@ -1,10 +1,11 @@
 export default class View {
   constructor(userDates) {
-    this.renderUserElemetns(userDates);
+    this.renderUsersElements(userDates);
   }
 
   elements = {
     tBody: document.querySelector("#tbody"),
+    productSelect: document.querySelector("#productSelect"),
   };
 
   addUserElement(userData) {
@@ -27,9 +28,18 @@ export default class View {
 
     this.elements.tBody.insertAdjacentHTML("beforeend", html);
   }
-  renderUserElemetns(userDates) {
+
+  renderUsersElements(userDates, type = "all") {
+   
     userDates.forEach((item) => {
-      this.addUserElement(item);
+      if (type === "all") {
+        this.addUserElement(item);
+      } else if (item.product.type === type) {
+        this.addUserElement(item);
+      }
     });
+  }
+  clearElements() {
+    this.elements.tBody.innerHTML = "";
   }
 }
