@@ -1,11 +1,18 @@
 export default class View {
-  constructor(userDates) {
+  constructor(userDates, newUsers) {
+    this.newUsers = newUsers;
+
     this.renderUsersElements(userDates);
+    this.renderNewUsers();
   }
 
   elements = {
     tBody: document.querySelector("#tbody"),
     productSelect: document.querySelector("#productSelect"),
+    topStatusBar: document.querySelector("#topStatusBar"),
+    topStatusBarItems: document.querySelectorAll(".topstatusbar__btn"),
+    leftPanelsBtns: document.querySelectorAll(".left-panel__btn"),
+    badgeNew: document.querySelector("#badge-new"),
   };
 
   addUserElement(userData) {
@@ -41,14 +48,46 @@ export default class View {
       value: statusObj[status].value,
     };
   }
-  renderUsersElements(userDates, type = "all") {
+  renderUsersElements(userDates, type = "all", process = "all") {
+    console.log(type, process);
     userDates.forEach((item) => {
-      if (type === "all") {
+      if (process === "all" && type === "all") {
         this.addUserElement(item);
-      } else if (item.product.type === type) {
+      } else if (process === "all" && type != "all") {
+        if (type === item.product.type) {
+          this.addUserElement(item);
+        }
+      } else if (type === "all" && process != "all") {
+        if (process === item.status) {
+          this.addUserElement(item);
+        }
+      } else if (process === item.status && type === item.product.type) {
         this.addUserElement(item);
+      } else {
+      }
+      // if (type === "all" && process === 'all') {
+      //   this.addUserElement(item);
+      // } else if (item.product.type === type && item.status === process) {
+      // }else {
+      //   console.log('lol');
+      // }
+    });
+  }
+  addActiveCls(process) {
+    this.elements.leftPanelsBtns.forEach((item) => {
+      item.classList.remove("active");
+
+      if (item.dataset.value === process) {
+        item.classList.add("active");
       }
     });
+  }
+  renderNewUsers() {
+    if (this.newUsers != -1) {
+      this.elements.badgeNew.innerText = this.newUsers;
+    } else {
+      this.elements.badgeNew.innerText = "";
+    }
   }
   clearElements() {
     this.elements.tBody.innerHTML = "";

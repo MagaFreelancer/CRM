@@ -2,7 +2,10 @@ export default class Model {
   constructor() {
     this.data = {
       users: [],
-      newUsers: 0,
+    };
+    this.status = {
+      typeFilter: "all",
+      processFilter: "all",
     };
     this.getLocalStorage();
   }
@@ -62,7 +65,7 @@ export default class Model {
     const index = elementInfo.index;
 
     this.data.users.splice(index, 1, userData);
-    this.setToLocalStorage()
+    this.setToLocalStorage();
   }
   getData() {
     return this.data;
@@ -82,6 +85,23 @@ export default class Model {
       return this.getElement(Number(id)).data;
     } else alert("Элемент не выбран");
   }
+  getStatus() {
+    return this.status;
+  }
+  changeStatus(type, process) {
+    this.status.typeFilter = type;
+    this.status.processFilter = process;
+  }
+  countNewUsers() {
+    let count = 0;
+    this.data.users.forEach((item) => {
+      if (item.status === "new") {
+        count++;
+      }
+    });
+    return count === 0 ? -1: count;
+  }
+
   setToLocalStorage() {
     localStorage.setItem("data", JSON.stringify(this.data));
   }
@@ -92,8 +112,10 @@ export default class Model {
       this.data = dataFromLocal;
     }
   }
+
   test() {
-    console.log(this.data);
+    console.log("data:", this.data);
+    console.log("status:", this.status);
   }
 }
 
