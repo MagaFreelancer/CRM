@@ -10,25 +10,11 @@ view.elements.productSelect.addEventListener("change", (e) => {
   filterItems();
 });
 view.elements.leftPanelsBtns.forEach((item) => {
-  item.addEventListener("click", (e) => {
-    const process = e.target.dataset.value;
-    const status = model.getStatus();
-    
-    model.changeStatus(status.typeFilter, process);
-    view.addActiveCls(process)
-    filterItems();
-
-  });
+  item.addEventListener("click", processFilter);
 });
 
 view.elements.topStatusBarItems.forEach((item) => {
-  item.addEventListener("click", (e) => {
-    const process = e.target.dataset.value;
-    const status = model.getStatus();
-    model.changeStatus(status.typeFilter, process);
-    view.addActiveCls(process)
-    filterItems();
-  });
+  item.addEventListener("click", processFilter);
 });
 
 view.elements.tBody.addEventListener("click", (e) => {
@@ -37,7 +23,14 @@ view.elements.tBody.addEventListener("click", (e) => {
     model.saveIdEditElement(id);
   }
 });
+function processFilter() {
+  const process = this.dataset.value;
+  const status = model.getStatus();
 
+  model.changeStatus(status.typeFilter, process);
+  view.addActiveCls(process);
+  filterItems();
+}
 function filterItems() {
   const data = model.getData().users;
   const status = model.getStatus();
