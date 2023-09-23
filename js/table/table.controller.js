@@ -10,3 +10,9 @@ view.elements.productSelect.addEventListener("change", (e) => {
   view.clearElements();
   view.renderUsersElements(data, type);
 });
+view.elements.tBody.addEventListener("click", (e) => {
+  if (e.target.hasAttribute("data-edit")) {
+    const id = e.target.closest(".tbody__item").id;
+    model.saveIdEditElement(id);
+  }
+});

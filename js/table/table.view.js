@@ -9,8 +9,9 @@ export default class View {
   };
 
   addUserElement(userData) {
+    const status = this.getStatus(userData.status);
     const html = `
-      <tr data-type="${userData.product.type}">
+      <tr class="tbody__item" data-type="${userData.product.type}" id="${userData.id}">
 						<th scope="row">${userData.id}</th>
 						<td>${userData.date}</td>
 						<td>${userData.product.value}</td>
@@ -18,19 +19,29 @@ export default class View {
 						<td>${userData.email}</td>
 						<td>${userData.number}</td>
 						<td>
-							<div class="badge badge-pill badge-danger">Новый</div>
+							<div class="badge badge-pill ${status.clsName}">${status.value}</div>
 						</td>
 						<td>
-							<a href="edit.html">Редактировать</a>
+							<a href="edit.html" data-edit>Редактировать</a>
 						</td>
 					</tr>
       `;
 
     this.elements.tBody.insertAdjacentHTML("beforeend", html);
   }
+  getStatus(status) {
+    const statusObj = {
+      new: { clsName: "badge-danger", value: "Новый" },
+      inwork: { clsName: "badge-warning", value: "В работе" },
+      complete: { clsName: "badge-success", value: "Завершенный" },
+    };
 
+    return {
+      clsName: statusObj[status].clsName,
+      value: statusObj[status].value,
+    };
+  }
   renderUsersElements(userDates, type = "all") {
-   
     userDates.forEach((item) => {
       if (type === "all") {
         this.addUserElement(item);

@@ -17,14 +17,16 @@ export default class Model {
       seconds = ndate.getSeconds();
 
     const date = `${this.filterDate(day)}:${this.filterDate(month)}:${year}`;
-    const time = `${this.filterDate(hours)}:${this.filterDate(minutes)}:${this.filterDate(seconds)}`;
+    const time = `${this.filterDate(hours)}:${this.filterDate(
+      minutes
+    )}:${this.filterDate(seconds)}`;
     return {
       date: date,
       time: time,
     };
   }
   filterDate(date) {
-    let localDate = date < 10 ? "1" + date : date;
+    let localDate = date < 10 ? "0" + date : date;
     return localDate;
   }
   createId() {
@@ -55,8 +57,30 @@ export default class Model {
     this.data.users.push(obj);
     this.setToLocalStorage();
   }
+  changeUser(userData) {
+    const elementInfo = this.getElement(userData.id);
+    const index = elementInfo.index;
+
+    this.data.users.splice(index, 1, userData);
+    this.setToLocalStorage()
+  }
   getData() {
     return this.data;
+  }
+  getElement(id) {
+    return {
+      data: this.data.users.find((el) => el.id === id),
+      index: this.data.users.findIndex((el) => el.id === id),
+    };
+  }
+  saveIdEditElement(id) {
+    localStorage.setItem("elementId", JSON.stringify(id));
+  }
+  getEditElement() {
+    const id = JSON.parse(localStorage.getItem("elementId"));
+    if (id) {
+      return this.getElement(Number(id)).data;
+    } else alert("Элемент не выбран");
   }
   setToLocalStorage() {
     localStorage.setItem("data", JSON.stringify(this.data));
