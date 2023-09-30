@@ -7,5 +7,6 @@ const view = new View(model.getEditElement());
 view.elements.form.addEventListener('submit', (e)=> {
     e.preventDefault()
     const newInfo = view.getElements();
-  model.changeUser(newInfo)
+  model.changeUser(newInfo);
+  window.location.href = 'table.html';
 })

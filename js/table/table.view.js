@@ -1,8 +1,7 @@
 export default class View {
-  constructor(userDates, newUsers) {
+  constructor( newUsers) {
     this.newUsers = newUsers;
 
-    this.renderUsersElements(userDates);
     this.renderNewUsers();
   }
 
@@ -33,7 +32,6 @@ export default class View {
 						</td>
 					</tr>
       `;
-
     this.elements.tBody.insertAdjacentHTML("beforeend", html);
   }
   getStatus(status) {
@@ -48,29 +46,9 @@ export default class View {
       value: statusObj[status].value,
     };
   }
-  renderUsersElements(userDates, type = "all", process = "all") {
-    console.log(type, process);
+  renderUsersElements(userDates) {
     userDates.forEach((item) => {
-      if (process === "all" && type === "all") {
-        this.addUserElement(item);
-      } else if (process === "all" && type != "all") {
-        if (type === item.product.type) {
-          this.addUserElement(item);
-        }
-      } else if (type === "all" && process != "all") {
-        if (process === item.status) {
-          this.addUserElement(item);
-        }
-      } else if (process === item.status && type === item.product.type) {
-        this.addUserElement(item);
-      } else {
-      }
-      // if (type === "all" && process === 'all') {
-      //   this.addUserElement(item);
-      // } else if (item.product.type === type && item.status === process) {
-      // }else {
-      //   console.log('lol');
-      // }
+      this.addUserElement(item);
     });
   }
   addActiveCls(process) {
@@ -81,6 +59,16 @@ export default class View {
         item.classList.add("active");
       }
     });
+    this.elements.topStatusBarItems.forEach((item) => {
+      item.classList.remove("active");
+
+      if (item.dataset.value === process) {
+        item.classList.add("active");
+      }
+    });
+  }
+  activeSelect(type) {
+    this.elements.productSelect.value = type
   }
   renderNewUsers() {
     if (this.newUsers != -1) {

@@ -3,10 +3,7 @@ export default class Model {
     this.data = {
       users: [],
     };
-    this.status = {
-      typeFilter: "all",
-      processFilter: "all",
-    };
+    this.status = this.renderStatus();
     this.getLocalStorage();
   }
 
@@ -27,6 +24,19 @@ export default class Model {
       date: date,
       time: time,
     };
+  }
+  saveStatus() {
+    localStorage.setItem("status", JSON.stringify(this.status));
+  }
+  renderStatus() {
+    const status = JSON.parse(localStorage.getItem("status"));
+    if (!status) {
+      status = {
+        typeFilter: "all",
+        processFilter: "all",
+      };
+    }
+    return status;
   }
   filterDate(date) {
     let localDate = date < 10 ? "0" + date : date;
@@ -88,6 +98,28 @@ export default class Model {
   getStatus() {
     return this.status;
   }
+  filterElements(filter = this.status) {
+    const filteredElements = [];
+    this.data.users.forEach((item) => {
+      if (filter.processFilter === "all" && filter.typeFilter === "all") {
+        filteredElements.push(item);
+      } else if (filter.processFilter === "all" && filter.typeFilter != "all") {
+        if (filter.typeFilter === item.product.type) {
+          filteredElements.push(item);
+        }
+      } else if (filter.typeFilter === "all" && filter.processFilter != "all") {
+        if (filter.processFilter === item.status) {
+          filteredElements.push(item);
+        }
+      } else if (
+        filter.processFilter === item.status &&
+        filter.typeFilter === item.product.type
+      ) {
+        filteredElements.push(item);
+      }
+    });
+    return filteredElements;
+  }
   changeStatus(type, process) {
     this.status.typeFilter = type;
     this.status.processFilter = process;
@@ -99,7 +131,7 @@ export default class Model {
         count++;
       }
     });
-    return count === 0 ? -1: count;
+    return count === 0 ? -1 : count;
   }
 
   setToLocalStorage() {
